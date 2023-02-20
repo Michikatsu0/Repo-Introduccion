@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExerciseI3 : MonoBehaviour
+public class ExerciseI5 : MonoBehaviour
 {
     // We need to create a mover instance
-    IntroMoverEI3 mover;
+    IntroMoverEI5 mover;
+
     // Start is called before the first frame update
     void Start()
     {
-        mover = new IntroMoverEI3();
+        mover = new IntroMoverEI5();
     }
 
     // Update is called once per frame
@@ -20,9 +21,8 @@ public class ExerciseI3 : MonoBehaviour
         mover.CheckEdges();
     }
 }
-public class IntroMoverEI3
+public class IntroMoverEI5
 {
-    private Transform targetPos;
     // The basic properties of a mover class
     // x, y, z 
     private Vector3 location;
@@ -33,7 +33,7 @@ public class IntroMoverEI3
     // Gives the class a GameObject to draw on the screen
     private GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-    public IntroMoverEI3()
+    public IntroMoverEI5()
     {
         FindWindowLimits();
         // Set location to Vector2.zero, shorthand for (0, 0)
@@ -45,30 +45,15 @@ public class IntroMoverEI3
 
     public void Step()
     {
-        this.targetPos = GameObject.Find("target1").transform;
         location = mover.transform.position;
-        float choice = Random.Range(0f, 1f);
-
-        if (choice < 0.5f)
-        {
-            mover.transform.position = Vector3.Lerp(location, targetPos.position, 0.08f);
-        }
-        else if (choice > 0.5f && choice < 0.6f)
-        {
-            location.x++;
-        }
-        else if (choice > 0.6f && choice < 0.7f)
-        {
-            location.x--;
-        }
-        else if (choice > 0.7f && choice < 0.9f)
-        {
-            location.y++;
-        }
-        else if (choice > 0.9f && choice < 1f)
-        {
-            location.y--;
-        }
+        // Each frame choose a new Random number 0,1,2,3
+        // If the number is equal to one of those values, take a step
+        // Random.Range() is MaxExclusive while using integer values, possible values 0,1,2,3
+        float choiceX = Random.Range(Random.Range(-10f, 10f), Random.Range(-10f ,10f));
+        float choiceY = Random.Range(Random.Range(-10f, 10f), Random.Range(-10f, 10f));
+        
+        location.x += choiceX;
+        location.y += choiceY;
 
         mover.transform.position += location * Time.deltaTime;
     }

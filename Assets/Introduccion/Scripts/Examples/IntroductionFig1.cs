@@ -40,6 +40,7 @@ public class IntroMover
         location = Vector2.zero;
         // We need to create a new material for WebGL
         Renderer r = mover.GetComponent<Renderer>();
+        mover.name = "target1";
         r.material = new Material(Shader.Find("Diffuse"));
     }
 

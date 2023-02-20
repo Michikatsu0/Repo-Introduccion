@@ -4,11 +4,10 @@ public class ExerciseI2 : MonoBehaviour
 {
     // We need to create a mover instance
     IntroMoverEI2 mover;
-    [SerializeField] private Transform targetPos;
     // Start is called before the first frame update
     void Start()
     {
-        mover = new IntroMoverEI2(targetPos);
+        mover = new IntroMoverEI2();
     }
 
     // Update is called once per frame
@@ -34,9 +33,10 @@ public class IntroMoverEI2
     // Gives the class a GameObject to draw on the screen
     private GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-    public IntroMoverEI2(Transform targetPos)
+    public IntroMoverEI2()
     {
-        this.targetPos = targetPos;
+        
+
         FindWindowLimits();
         // Set location to Vector2.zero, shorthand for (0, 0)
         location = Vector2.zero;
@@ -47,16 +47,32 @@ public class IntroMoverEI2
 
     public void Step()
     {
+        this.targetPos = GameObject.Find("target1").transform;
+
         location = mover.transform.position;
-        // Each frame choose a new Random number 0,1,2,3
-        // If the number is equal to one of those values, take a step
-        // Random.Range() is MaxExclusive while using integer values, possible values 0,1,2,3
-        float choice = Random.Range(0f, 1f);
+        float choice = Random.Range(0f, 5f);
 
         if (choice < 0.2f)
         {
             mover.transform.position = Vector3.Lerp(location, targetPos.position, 0.08f);
         }
+        else if (choice > 0.2f && choice < 0.5f)
+        {
+            location.x++;
+        }
+        else if (choice > 0.5f && choice < 0.7f)
+        {
+            location.x--;
+        }
+        else if (choice > 0.7f && choice < 0.9f)
+        {
+            location.y++;
+        }
+        else if (choice > 0.9f && choice < 1)
+        {
+            location.y--;
+        }
+        mover.transform.position += location * Time.deltaTime;
     }
 
     public void CheckEdges()
