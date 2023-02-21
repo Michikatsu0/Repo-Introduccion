@@ -24,7 +24,7 @@ public class ExerciseI7 : MonoBehaviour
 }
 public class IntroMoverEI7
 {
-    Vector2 location;
+    Vector3 location;
 
     // The window limits
     private Vector2 maximumPos;
@@ -38,7 +38,7 @@ public class IntroMoverEI7
     float yScale = .5f;
 
     // Gives the class a GameObject to draw on the screen
-    public GameObject moverGO = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+    public GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
     public float timeSinceReset;
     public float resetTime;
@@ -48,23 +48,28 @@ public class IntroMoverEI7
         FindWindowLimits();
         location = Vector2.zero;
         // Create a new material for WebGL
-        Renderer r = moverGO.GetComponent<Renderer>();
+        Renderer r = mover.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("Diffuse"));
     }
 
     public void Step()
     {
-        float width = widthScale * Mathf.PerlinNoise(Time.time * xScale, 0.0f) * timeSinceReset;
-        float height = heightScale * Mathf.PerlinNoise(0.0f, Time.time * yScale) * timeSinceReset;
-        Vector3 pos = moverGO.transform.position;
-        pos.y += height;
-        pos.x += width;
-        moverGO.transform.position += pos * Time.deltaTime;
+        location = mover.transform.position;
+        // Each frame choose a new Random number 0,1,2,3
+        // If the number is equal to one of those values, take a step
+        // Random.Range() is MaxExclusive while using integer values, possible values 0,1,2,3
+        float stepX = widthScale * Mathf.PerlinNoise(Time.time * xScale, 0.0f) * timeSinceReset;
+        float stepY = heightScale * Mathf.PerlinNoise(0.0f, Time.time * yScale) * timeSinceReset;
+
+        location.x += stepX;
+        location.y += stepY;
+
+        mover.transform.position += location * Time.deltaTime;
     }
 
     public void CheckEdges()
     {
-        location = moverGO.transform.position;
+        location = mover.transform.position;
         if (location.x > maximumPos.x || location.x < -maximumPos.x)
         {
             Reset();
@@ -74,7 +79,7 @@ public class IntroMoverEI7
         {
             Reset();
         }
-        moverGO.transform.position = location;
+        mover.transform.position = location;
     }
 
     void Reset()

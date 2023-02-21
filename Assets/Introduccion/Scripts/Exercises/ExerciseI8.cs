@@ -20,13 +20,10 @@ public class ExerciseI8 : MonoBehaviour
     private Color[] pix;
     private Renderer rend;
     public float speed;
-    private float time;
-    public float delayColor;
 
     void Start()
     {
         rend = GetComponent<Renderer>();
-        time = 0;
         // Set up the texture and a Color array to hold pixels during processing.
         noiseTex = new Texture2D(pixWidth, pixHeight);
         pix = new Color[noiseTex.width * noiseTex.height];
@@ -61,16 +58,9 @@ public class ExerciseI8 : MonoBehaviour
     {
         
         CalcNoise();
-        if (time >= delayColor)
-        {
-            time = 0;
-            PlayColor();
-        }
+        PlayColor();
         Move();
-        
-        time += Time.deltaTime;
     }
-
     void Move()
     {
         xOrg += speed * Time.deltaTime;
@@ -79,6 +69,6 @@ public class ExerciseI8 : MonoBehaviour
 
     void PlayColor()
     {
-        rend.material.color = Random.ColorHSV(Random.Range(0f,1f), Random.Range(0f, 1f));
+        rend.material.color = Color.Lerp(Color.red,Color.green, Mathf.PerlinNoise(Time.time, 1));
     }
 }
