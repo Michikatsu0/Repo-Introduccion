@@ -19,14 +19,12 @@ public class Step1 : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate()
-    {
-        
-
+    { 
         for (int i = 0; i < movers.Length; i++)
         {
             Vector2 RandomPointsInWindowLimits = new Vector2(Random.Range(-movers[i].maximumPos.x, movers[i].maximumPos.x), Random.Range(-movers[i].maximumPos.y, movers[i].maximumPos.y));
             Vector2 dir = movers[i].SubtractVectors(RandomPointsInWindowLimits, movers[i].location);
-            movers[i].acceleration = movers[i].ScaleVector(dir.normalized, .5f);
+            movers[i].acceleration = movers[i].ScaleVector(dir.normalized, Random.Range(1f,5f));
             movers[i].Step();
             movers[i].CheckEdges();
         }
