@@ -21,7 +21,9 @@ public class Chapter2Exe1 : MonoBehaviour
     [SerializeField] float xScale = 0.1f;
 
     // Define constant forces in our environment
+
     public Vector3 wind = new Vector3(5f, 0f, 0f);
+
     private Vector3 helium = new Vector3(0f, 50f, 0f);
 
     // Start is called before the first frame update
@@ -41,11 +43,12 @@ public class Chapter2Exe1 : MonoBehaviour
     void FixedUpdate()
     {
         // Apply force to the mover, with ForceMode.Impulse taking mass into account
-        
+
+        mover.body.AddForce(helium, ForceMode.Force);
         mover.CheckEdges();
         CaclNoise();
         mover.body.AddForce(wind, ForceMode.Impulse);
-        mover.body.AddForce(helium, ForceMode.Force);
+
     }
 }
 

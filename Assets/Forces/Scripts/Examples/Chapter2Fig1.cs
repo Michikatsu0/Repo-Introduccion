@@ -13,7 +13,7 @@ public class Chapter2Fig1 : MonoBehaviour
     Mover2_1 mover;
 
     // Define constant forces in our environment
-    private Vector3 wind = new Vector3(0.05f, 0f, 0f);
+    private Vector3 wind = new Vector3(0.004f, 0f, 0f);
 
     // Start is called before the first frame update
     void Start()
