@@ -1,53 +1,69 @@
-
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class Step1 : MonoBehaviour
+public class Step1_3 : MonoBehaviour
 {
     // Create an array of 10 movers
-    private Mover1_Step[] movers = new Mover1_Step[10];
+    private Mover1_Step3[] movers = new Mover1_Step3[10];
 
+
+    // Distance covered per second along X and Y axis of Perlin plane.
+    float xScale = 2.0f;
+    float yScale = .2f;
+    
     // Start is called before the first frame update
     void Start()
     {
         // Instantiate each mover in the array as a new mover
         for (int i = 0; i < movers.Length; i++)
         {
-            movers[i] = new Mover1_Step();
+            movers[i] = new Mover1_Step3();
         }
 
     }
 
     // Update is called once per frame
     void FixedUpdate()
-    { 
+    {
+        
         for (int i = 0; i < movers.Length; i++)
         {
-            Vector2 RandomPointsInWindowLimits = new Vector2(Random.Range(-movers[i].maximumPos.x, movers[i].maximumPos.x), Random.Range(-movers[i].maximumPos.y, movers[i].maximumPos.y));
+            movers[i].timeSinceReset = Time.time - movers[i].resetTime;
+            float stepX = movers[i].widthScale * Mathf.PerlinNoise(Time.time * xScale, 0.0f) * movers[i].timeSinceReset;
+            float stepY = movers[i].heightScale * Mathf.PerlinNoise(0.0f, Time.time * yScale) * movers[i].timeSinceReset;
+
+            Vector2 RandomPointsInWindowLimits = new Vector2(stepX, stepY);
             Vector2 dir = movers[i].SubtractVectors(RandomPointsInWindowLimits, movers[i].location);
-            movers[i].acceleration = movers[i].ScaleVector(dir.normalized, Random.Range(1f,5f));
+            movers[i].acceleration = movers[i].ScaleVector(dir.normalized, Random.Range(20f, 40f));
             movers[i].Step();
             movers[i].CheckEdges();
         }
     }
 }
 
-public class Mover1_Step
+public class Mover1_Step3
 {
+
+    public float timeSinceReset;
+    public float heightScale = .7f;
+    public float widthScale = 1.0f;
+
+
     // The basic properties of a mover class
     public Vector2 location, velocity, acceleration;
     private float topSpeed;
 
     // The window limits
     public Vector2 maximumPos;
-
+    public float resetTime;
     // Gives the class a GameObject to draw on the screen
     private GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-    public Mover1_Step()
+    public Mover1_Step3()
     {
         FindWindowLimits();
 
-        location = new Vector2(Random.Range(-4f, 4f), Random.Range(-4f, 4f));
+        location = new Vector2(Random.Range(-maximumPos.x, maximumPos.x), Random.Range(-maximumPos.y, maximumPos.y));
 
         // Vector2.zero is shorthand for a (0, 0) vector
         velocity = Vector2.zero;
@@ -114,7 +130,13 @@ public class Mover1_Step
         acceleration = Vector2.zero;
         velocity = Vector2.zero;
     }
-
+    void Reset()
+    {
+        location = Vector2.zero;
+        resetTime = Time.time;
+        heightScale = Random.Range(-1f, 1f);
+        widthScale = Random.Range(-1f, 1f);
+    }
     private void FindWindowLimits()
     {
         // We want to start by setting the camera's projection to Orthographic mode

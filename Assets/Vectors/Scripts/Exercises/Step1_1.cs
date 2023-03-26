@@ -1,9 +1,10 @@
+
 using UnityEngine;
 
-public class Step2 : MonoBehaviour
+public class Step1_1 : MonoBehaviour
 {
     // Create an array of 10 movers
-    private Mover1_Step2[] movers = new Mover1_Step2[10];
+    private Mover1_Step1_1[] movers = new Mover1_Step1_1[10];
 
     // Start is called before the first frame update
     void Start()
@@ -11,27 +12,26 @@ public class Step2 : MonoBehaviour
         // Instantiate each mover in the array as a new mover
         for (int i = 0; i < movers.Length; i++)
         {
-            movers[i] = new Mover1_Step2();
+            movers[i] = new Mover1_Step1_1();
         }
 
     }
 
     // Update is called once per frame
     void FixedUpdate()
-    {
+    { 
         for (int i = 0; i < movers.Length; i++)
         {
-            Vector2 RandomPointsInWindowLimits = Random.insideUnitCircle * Random.Range(50f,100f);
-            Debug.Log(RandomPointsInWindowLimits);
+            Vector2 RandomPointsInWindowLimits = new Vector2(Random.Range(-movers[i].maximumPos.x, movers[i].maximumPos.x), Random.Range(-movers[i].maximumPos.y, movers[i].maximumPos.y));
             Vector2 dir = movers[i].SubtractVectors(RandomPointsInWindowLimits, movers[i].location);
-            movers[i].acceleration = movers[i].ScaleVector(dir.normalized, Random.Range(5f, 10f));
+            movers[i].acceleration = movers[i].ScaleVector(dir.normalized, Random.Range(2f,15f));
             movers[i].Step();
             movers[i].CheckEdges();
         }
     }
 }
 
-public class Mover1_Step2
+public class Mover1_Step1_1
 {
     // The basic properties of a mover class
     public Vector2 location, velocity, acceleration;
@@ -43,11 +43,11 @@ public class Mover1_Step2
     // Gives the class a GameObject to draw on the screen
     private GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-    public Mover1_Step2()
+    public Mover1_Step1_1()
     {
         FindWindowLimits();
 
-        location = new Vector2(Random.Range(-maximumPos.x, maximumPos.x), Random.Range(-maximumPos.y, maximumPos.y));
+        location = new Vector2(Random.Range(-4f, 4f), Random.Range(-4f, 4f));
 
         // Vector2.zero is shorthand for a (0, 0) vector
         velocity = Vector2.zero;
