@@ -2,33 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Chapter2Exe8 : MonoBehaviour
+public class Step2_3 : MonoBehaviour
 {
     // Create a list to store multiple Movers
     [SerializeField] float delay;
-    List<Mover2_E8> movers = new List<Mover2_E8>();
-    List<Attractor2_E8> l_attractors = new List<Attractor2_E8>();
+    List<Mover2_Step2_3> movers = new List<Mover2_Step2_3>();
+    List<Attractor2_Step2_3> l_attractors = new List<Attractor2_Step2_3>();
     float time = 0;
     int attractorIndex = 0;
     // Start is called before the first frame update
     void Start()
     {
-        int numberOfMovers = 10;
+        int numberOfMovers = 30;
         for (int i = 0; i < numberOfMovers; i++)
         {
             Vector2 randomLocation = new Vector2(Random.Range(-7f, 7f), Random.Range(-7f, 7f));
             Vector2 randomVelocity = new Vector2(Random.Range(0f, 5f), Random.Range(0f, 5f));
-            Mover2_E8 m = new Mover2_E8(Random.Range(0.2f, 1f), randomVelocity, randomLocation); //Each Mover is initialized randomly.
+            Mover2_Step2_3 m = new Mover2_Step2_3(Random.Range(0.2f, 1f), randomVelocity, randomLocation); //Each Mover is initialized randomly.
             movers.Add(m);
         }
 
-        int nomberOfAtractors = 5;
-        for(int i = 0; i < nomberOfAtractors; i++)
+        int nomberOfAtractors = 10;
+        for (int i = 0; i < nomberOfAtractors; i++)
         {
-            Attractor2_E8 a = new Attractor2_E8();
+            Attractor2_Step2_3 a = new Attractor2_Step2_3();
             l_attractors.Add(a);
         }
-        foreach (Attractor2_E8 attractor in l_attractors)
+        foreach (Attractor2_Step2_3 attractor in l_attractors)
         {
             attractor.attractor.SetActive(false);
         }
@@ -43,7 +43,7 @@ public class Chapter2Exe8 : MonoBehaviour
         }
         time += Time.deltaTime;
 
-        foreach (Attractor2_E8 attractor in l_attractors)
+        foreach (Attractor2_Step2_3 attractor in l_attractors)
         {
             attractor.attractor.SetActive(false);
         }
@@ -56,19 +56,41 @@ public class Chapter2Exe8 : MonoBehaviour
 
     void FixedUpdate()
     {
-        foreach (Mover2_E8 m in movers)
+        foreach (Mover2_Step2_3 m in movers)
         {
             Rigidbody body = m.body;
             Vector2 force = l_attractors[attractorIndex].Attract(body); // Apply the attraction from the Attractor on each Mover object
 
             m.ApplyForce(force);
+
+
             m.CalculatePosition();
+        }
+
+        for (int i = 0; i < movers.Count; i++)
+        {
+            for (int j = 0; j < movers.Count; j++)
+            {
+                if (i != j)
+                {
+                    // Now that we are sure that our Mover will not attract itself, we need it to attract a different Mover
+                    // We do that by directing a mover to use their Attract() method on another mover Rigidbodys
+                    Vector2 attractedMover = movers[j].Repel(movers[i].body);
+
+                    // We then apply that force the mover with the Rigidbody's Addforce() method
+                    movers[i].body.AddForce(attractedMover*0.08f, ForceMode.Impulse);
+                }
+            }
+            // Now we check the boundaries of our scene to make sure the movers don't fly off
+            // When we use gravity, the Movers will naturally fall out of the camera's view
+            // This stops that.
+            movers[i].CalculatePosition();
         }
     }
 }
 
 
-public class Attractor2_E8
+public class Attractor2_Step2_3
 {
     private float radius;
     private float mass;
@@ -79,7 +101,7 @@ public class Attractor2_E8
     private Rigidbody body;
     public GameObject attractor;
 
-    public Attractor2_E8()
+    public Attractor2_Step2_3()
     {
         attractor = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         Object.Destroy(attractor.GetComponent<SphereCollider>());
@@ -87,7 +109,7 @@ public class Attractor2_E8
 
         body = attractor.AddComponent<Rigidbody>();
 
-        body.position = new Vector3(Random.Range(-7f, 7f), Random.Range(-5f, 5f), 0f);
+        body.position = new Vector3(Random.Range(-20f, 20f), Random.Range(-10f, 10f), 0f);
 
         // Generate a radius
         radius = 4;
@@ -109,7 +131,7 @@ public class Attractor2_E8
 
         renderer.material = new Material(Shader.Find("Diffuse"));
         renderer.material.color = Color.red;
-
+        renderer.enabled = false;
         G = 9.8f;
     }
 
@@ -128,7 +150,7 @@ public class Attractor2_E8
     }
 }
 
-public class Mover2_E8
+public class Mover2_Step2_3
 {
     // The basic properties of a mover class
     public Rigidbody body;
@@ -137,7 +159,7 @@ public class Mover2_E8
 
     private Vector2 maximumPos;
 
-    public Mover2_E8(float randomMass, Vector2 initialVelocity, Vector2 initialPosition)
+    public Mover2_Step2_3(float randomMass, Vector2 initialVelocity, Vector2 initialPosition)
     {
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         Object.Destroy(mover.GetComponent<SphereCollider>());
@@ -179,6 +201,20 @@ public class Mover2_E8
             velocity.y *= -1 * Time.deltaTime;
         }
         body.velocity = velocity;
+    }
+
+    public Vector2 Repel(Rigidbody m)
+    {
+        Vector2 force = body.position - m.position;
+        float distance = force.magnitude;
+
+        // Remember we need to constrain the distance so that our circle doesn't spin out of control
+        distance = Mathf.Clamp(distance, 5f, 25f);
+
+        force.Normalize();
+        float strength = (9.81f * body.mass * m.mass) / (distance * distance);
+        force *= -strength;
+        return force;
     }
 
     private void FindWindowLimits()

@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 790b199cfbd106b4e95406d9b33fecb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ceilingY: 5
+  ceilingY: 10
   floorY: 0
   leftWallX: -10
   rightWallX: 10
