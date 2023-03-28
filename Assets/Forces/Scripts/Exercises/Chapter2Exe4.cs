@@ -31,7 +31,7 @@ public class Chapter2Exe4 : MonoBehaviour
     [SerializeField] private float frictionStrength2 = -0.5f;
     [SerializeField] private float frictionStrength3 = 4.5f;
 
-    // Start is called before the first frame update
+    // Start is called before the first frame updateS
     void Start()
     {
         // Create copies of our mover and add them to our list
@@ -64,7 +64,6 @@ public class Chapter2Exe4 : MonoBehaviour
                     friction *= pocket.frictionCoefficient;
                     mover.body.AddForce(friction, ForceMode.Force);
                 }
-
             }
             mover.CheckEdges();
         }
@@ -161,6 +160,7 @@ public class Mover2_E4
             return false;
         }
     }
+
 }
 
 public class Pocket
