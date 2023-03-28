@@ -49,7 +49,7 @@ public class Chapter2Exe6 : MonoBehaviour
                     dragForce.Normalize();
                     float area = mover.body.transform.localScale.x * 2;
                     float velocityPow2 = mover.body.velocity.y * mover.body.velocity.y;
-                    dragForce *= fluid.dragCoefficient * area  * velocityPow2;
+                    dragForce *= (fluid.dragCoefficient * 0.5f) * area  * velocityPow2;
                     mover.body.AddForce(dragForce, ForceMode.Force);
                 }
             }

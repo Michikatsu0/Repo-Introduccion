@@ -48,7 +48,7 @@ public class Chapter2Exe5 : MonoBehaviour
                     Vector3 dragForce = -mover.body.velocity;
                     dragForce.Normalize();
                     float velocityPow2 = mover.body.velocity.y * mover.body.velocity.y;
-                    dragForce *= fluid.dragCoefficient * velocityPow2;
+                    dragForce *= (fluid.dragCoefficient * 0.5f) * velocityPow2;
                     mover.body.AddForce(dragForce, ForceMode.Force);
                 }
             }
