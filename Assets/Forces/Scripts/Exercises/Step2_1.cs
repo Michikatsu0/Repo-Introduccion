@@ -98,7 +98,7 @@ public class Attractor2_Step2_1
         body.position = Vector3.zero;
 
         // Generate a radius
-        radius = 4;
+        radius = 4 * 2;
 
         // Place our mover at the specified spawn position relative
         // to the bottom of the sphere
