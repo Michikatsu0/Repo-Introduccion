@@ -13,7 +13,7 @@ public class Step2_3 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        int numberOfMovers = 30;
+        int numberOfMovers = 40;
         for (int i = 0; i < numberOfMovers; i++)
         {
             Vector2 randomLocation = new Vector2(Random.Range(-7f, 7f), Random.Range(-7f, 7f));
