@@ -1,17 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.FilePathAttribute;
-using UnityEngine.Rendering.VirtualTexturing;
 
-public class ExerciseI6 : MonoBehaviour
+public class Exercise2 : MonoBehaviour
 {
-    IntroMoverEI6 mover;
-
+    // We need to create a mover instance
+    IntroMoverEI2 mover;
     // Start is called before the first frame update
     void Start()
     {
-        mover = new IntroMoverEI6();
+        mover = new IntroMoverEI2();
     }
 
     // Update is called once per frame
@@ -23,21 +19,24 @@ public class ExerciseI6 : MonoBehaviour
     }
 }
 
-public class IntroMoverEI6
+
+public class IntroMoverEI2
 {
+    private Transform targetPos;
     // The basic properties of a mover class
     // x, y, z 
     private Vector3 location;
-    public float xstep;
-    public float ystep;
+
     // The window limits
     private Vector2 maximumPos;
 
     // Gives the class a GameObject to draw on the screen
     private GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-    public IntroMoverEI6()
+    public IntroMoverEI2()
     {
+        
+
         FindWindowLimits();
         // Set location to Vector2.zero, shorthand for (0, 0)
         location = Vector2.zero;
@@ -48,26 +47,31 @@ public class IntroMoverEI6
 
     public void Step()
     {
+        this.targetPos = GameObject.Find("target1").transform;
+
         location = mover.transform.position;
-        // Each frame choose a new Random number 0,1,2,3
-        // If the number is equal to one of those values, take a step
-        // Random.Range() is MaxExclusive while using integer values, possible values 0,1,2,3
+        float choice = Random.Range(0f, 5f);
 
-        float r = Random.Range(0f, 1f);
-        if (r < 0.05)
+        if (choice < 0.2f)
         {
-            xstep = Random.Range(-100f, 100f);
-            ystep = Random.Range(-100f, 100f);
+            mover.transform.position = Vector3.Lerp(location, targetPos.position, 0.08f);
         }
-        else
+        else if (choice > 0.2f && choice < 0.5f)
         {
-            xstep = Random.Range(-2F, 2f);
-            ystep = Random.Range(-2f, 2f);
+            location.x++;
         }
-
-        location.x += xstep;
-        location.y += ystep;
-
+        else if (choice > 0.5f && choice < 0.7f)
+        {
+            location.x--;
+        }
+        else if (choice > 0.7f && choice < 0.9f)
+        {
+            location.y++;
+        }
+        else if (choice > 0.9f && choice < 1)
+        {
+            location.y--;
+        }
         mover.transform.position += location * Time.deltaTime;
     }
 
@@ -97,4 +101,3 @@ public class IntroMoverEI6
         // maximumPos and -maximumPos equate to maximum and minimum screen bounds
     }
 }
-
