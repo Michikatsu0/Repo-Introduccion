@@ -1,13 +1,14 @@
 using UnityEngine;
 
-public class ExerciseI2 : MonoBehaviour
+public class Exercise1 : MonoBehaviour
 {
     // We need to create a mover instance
-    IntroMoverEI2 mover;
+    IntroMoverEI1 mover;
+
     // Start is called before the first frame update
     void Start()
     {
-        mover = new IntroMoverEI2();
+        mover = new IntroMoverEI1();
     }
 
     // Update is called once per frame
@@ -20,9 +21,8 @@ public class ExerciseI2 : MonoBehaviour
 }
 
 
-public class IntroMoverEI2
+public class IntroMoverEI1
 {
-    private Transform targetPos;
     // The basic properties of a mover class
     // x, y, z 
     private Vector3 location;
@@ -33,10 +33,8 @@ public class IntroMoverEI2
     // Gives the class a GameObject to draw on the screen
     private GameObject mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-    public IntroMoverEI2()
+    public IntroMoverEI1()
     {
-        
-
         FindWindowLimits();
         // Set location to Vector2.zero, shorthand for (0, 0)
         location = Vector2.zero;
@@ -47,31 +45,29 @@ public class IntroMoverEI2
 
     public void Step()
     {
-        this.targetPos = GameObject.Find("target1").transform;
-
         location = mover.transform.position;
-        float choice = Random.Range(0f, 5f);
+        // Each frame choose a new Random number 0,1,2,3
+        // If the number is equal to one of those values, take a step
+        // Random.Range() is MaxExclusive while using integer values, possible values 0,1,2,3
+        float choice = Random.Range(0f, 1f);
 
-        if (choice < 0.2f)
-        {
-            mover.transform.position = Vector3.Lerp(location, targetPos.position, 0.08f);
-        }
-        else if (choice > 0.2f && choice < 0.5f)
+        if (choice < 0.3f)
         {
             location.x++;
         }
-        else if (choice > 0.5f && choice < 0.7f)
+        else if (choice > 0.3f && choice < 0.5f)
         {
             location.x--;
         }
-        else if (choice > 0.7f && choice < 0.9f)
+        else if (choice > 0.5f && choice < 0.7f)
         {
             location.y++;
         }
-        else if (choice > 0.9f && choice < 1)
+        else if (choice > 0.7f && choice < 1f)
         {
             location.y--;
         }
+
         mover.transform.position += location * Time.deltaTime;
     }
 

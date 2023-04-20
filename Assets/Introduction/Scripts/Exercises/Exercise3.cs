@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExerciseI3 : MonoBehaviour
+public class Exercise3 : MonoBehaviour
 {
     // We need to create a mover instance
     IntroMoverEI3 mover;

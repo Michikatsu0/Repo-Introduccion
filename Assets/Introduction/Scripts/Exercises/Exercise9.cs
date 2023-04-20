@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExerciseI8 : MonoBehaviour
+public class Exercise9 : MonoBehaviour
 {
     // Width and height of the texture in pixels.
     public int pixWidth;
@@ -14,7 +14,7 @@ public class ExerciseI8 : MonoBehaviour
 
     // The number of cycles of the basic noise pattern that are repeated
     // over the width and height of the texture.
-    public float scale = 1.0F;
+    public float scale = 1F;
 
     private Texture2D noiseTex;
     private Color[] pix;
@@ -56,11 +56,19 @@ public class ExerciseI8 : MonoBehaviour
 
     void Update()
     {
-        
+        Scale();
         CalcNoise();
         PlayColor();
         Move();
+        
     }
+
+    void Scale()
+    {
+        scale += Time.deltaTime;
+
+    }
+    
     void Move()
     {
         xOrg += speed * Time.deltaTime;
@@ -69,6 +77,6 @@ public class ExerciseI8 : MonoBehaviour
 
     void PlayColor()
     {
-        rend.material.color = Color.Lerp(Color.red,Color.green, Mathf.PerlinNoise(Time.time, 1));
+        rend.material.color = Color.Lerp(Color.red, Color.green, Mathf.PerlinNoise(Time.time, 1));
     }
 }

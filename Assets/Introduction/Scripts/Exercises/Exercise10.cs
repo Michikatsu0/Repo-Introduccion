@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExerciseI10 : MonoBehaviour
+public class Exercise10 : MonoBehaviour
 {
     public int width = 256; //x-axis of the terrain
     public int height = 256; //z-axis

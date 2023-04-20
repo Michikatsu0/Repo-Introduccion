@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExerciseI4 : MonoBehaviour
+public class Exercise4 : MonoBehaviour
 {
     public float minRadius = 0.5f;
     public float maxRadius = 2.5f;
