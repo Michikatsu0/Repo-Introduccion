@@ -6,6 +6,8 @@ public class Chapter2Exe8 : MonoBehaviour
 {
     // Create a list to store multiple Movers
     [SerializeField] float delay;
+    [SerializeField] Material trailMaterial;
+    [SerializeField] Color trailColor;
     List<Mover2_E8> movers = new List<Mover2_E8>();
     List<Attractor2_E8> l_attractors = new List<Attractor2_E8>();
     float time = 0;
@@ -18,7 +20,7 @@ public class Chapter2Exe8 : MonoBehaviour
         {
             Vector2 randomLocation = new Vector2(Random.Range(-7f, 7f), Random.Range(-7f, 7f));
             Vector2 randomVelocity = new Vector2(Random.Range(0f, 5f), Random.Range(0f, 5f));
-            Mover2_E8 m = new Mover2_E8(Random.Range(0.2f, 1f), randomVelocity, randomLocation); //Each Mover is initialized randomly.
+            Mover2_E8 m = new Mover2_E8(Random.Range(0.2f, 1f), randomVelocity, randomLocation, trailColor, trailMaterial); //Each Mover is initialized randomly.
             movers.Add(m);
         }
 
@@ -107,10 +109,13 @@ public class Attractor2_E8
         body.useGravity = false;
         body.isKinematic = true;
 
+
+
         renderer.material = new Material(Shader.Find("Diffuse"));
         renderer.material.color = Color.red;
 
         G = 9.8f;
+
     }
 
     public Vector2 Attract(Rigidbody m)
@@ -137,7 +142,7 @@ public class Mover2_E8
 
     private Vector2 maximumPos;
 
-    public Mover2_E8(float randomMass, Vector2 initialVelocity, Vector2 initialPosition)
+    public Mover2_E8(float randomMass, Vector2 initialVelocity, Vector2 initialPosition, Color color, Material trailMaterial)
     {
         mover = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         Object.Destroy(mover.GetComponent<SphereCollider>());
@@ -149,7 +154,17 @@ public class Mover2_E8
 
         Renderer renderer = mover.GetComponent<Renderer>();
         renderer.material = new Material(Shader.Find("Diffuse"));
+        TrailRenderer trailRenderer = mover.AddComponent<TrailRenderer>();
+
         mover.transform.localScale = new Vector3(randomMass, randomMass, randomMass);
+
+        trailRenderer.material = trailMaterial;
+        trailRenderer.emitting = true;
+        trailRenderer.startWidth = 0.5f;
+        trailRenderer.endWidth = 0;
+        trailRenderer.time = 0.2f;
+        trailRenderer.startColor = color;
+        trailRenderer.endColor = color;
 
         body.mass = randomMass;
         body.position = initialPosition; // Default location
