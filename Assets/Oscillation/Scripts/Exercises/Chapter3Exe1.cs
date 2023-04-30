@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Chapter3Exe1 : MonoBehaviour
 {
-
     public GameObject baton;
     [SerializeField] float zAngleDegree = 60f;
 

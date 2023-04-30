@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Chapter3Fig3 : MonoBehaviour
 {
-    Mover mover;
+    Mover3_3 mover;
 
     //Mouse coordinates
     Vector2 inWorldMousePosition;
@@ -15,7 +15,7 @@ public class Chapter3Fig3 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mover = new Mover();
+        mover = new Mover3_3();
         inWorldMousePosition = Vector2.zero;
     }
 
@@ -35,7 +35,7 @@ public class Chapter3Fig3 : MonoBehaviour
     }
 }
 
-public class Mover
+public class Mover3_3
 {
     // The basic properties of a mover class
     public Vector2 location, velocity, acceleration;
@@ -45,7 +45,7 @@ public class Mover
 
     private GameObject mover;
 
-    public Mover()
+    public Mover3_3()
     {
         mover = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
