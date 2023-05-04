@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class Chapter3Exe8 : MonoBehaviour
 {
-    private Vector2 angleVel, angleAcc;
-    [SerializeField] private float multiplier,period = 5f;
+    [SerializeField] private float period = 5f;
     [SerializeField] private float xVP, xVN, yVP, yVN;
-
+    [SerializeField] private Vector2 amplitude;
     private List<Oscillator3_E8> oscilattors = new List<Oscillator3_E8>();
 
     void Start()
@@ -36,20 +35,16 @@ public class Chapter3Exe8 : MonoBehaviour
         foreach (Oscillator3_E8 o in oscilattors)
         {
             //Each oscillator object oscillating on the x-axis
-
+            o.amplitude = amplitude;
             var temp = ((Mathf.Sin((2 * Mathf.PI) * Time.deltaTime / period)));
             float x2 = Mathf.Lerp(xVN, xVP, Mathf.InverseLerp(1, 0, temp));
 
             var temp2 = ((Mathf.Cos((2 * Mathf.PI) * Time.deltaTime / period)));
             float y2 = Mathf.Lerp(yVN, yVP, Mathf.InverseLerp(1, 0, temp2));
 
-            angleVel = new Vector2(x2, y2);
+            var velocity = new Vector2(x2, y2);
 
-            angleAcc = angleVel / 2;
-
-            var velocity = angleAcc;
-
-            o.velocity = velocity*multiplier;
+            o.velocity = velocity;
 
             // Generate a random velocity and amplitude for each oscillator
             float x = Mathf.Cos(o.angle.x) * o.amplitude.x;
@@ -64,7 +59,7 @@ public class Chapter3Exe8 : MonoBehaviour
             o.lineRender.SetPosition(1, o.oGameObject.transform.position);
 
             //Move the oscillator
-            o.oGameObject.transform.transform.Translate(new Vector2(x, y) * Time.deltaTime);
+            o.oGameObject.transform.transform.Translate(new Vector2(x, y) * Time.deltaTime/ velocity);
         }
     }
 }
