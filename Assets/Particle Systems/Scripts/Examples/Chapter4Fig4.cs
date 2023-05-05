@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Chapter4Fig4 : MonoBehaviour
 {
-
+    [SerializeField] Material mat;
     particleSystemFigure4 psf4;
     Vector3 particleSystemLocation;
     public Vector3 velocity;
@@ -19,7 +19,7 @@ public class Chapter4Fig4 : MonoBehaviour
     {
         //Let's just have one particle
         maxParticles = 100000;
-        psf4 = new particleSystemFigure4(particleSystemLocation, startSpeed, velocity, lifeTime, maxParticles);
+        psf4 = new particleSystemFigure4(particleSystemLocation, startSpeed, velocity, lifeTime, maxParticles, mat);
     }
 }
 
@@ -32,7 +32,7 @@ public class particleSystemFigure4
     //This is because ParticleSystems in Unity are interfaces and not independent objects
     ParticleSystem particleSystemComponent;
 
-    public particleSystemFigure4(Vector3 particleSystemLocation, float startSpeed, Vector3 velocity, float lifeTime, int maxParticles)
+    public particleSystemFigure4(Vector3 particleSystemLocation, float startSpeed, Vector3 velocity, float lifeTime, int maxParticles, Material mat)
     {
         //Create the GameObject in the constructor
         particleSystemGameObject = new GameObject();
@@ -53,7 +53,7 @@ public class particleSystemFigure4
 
         //Now we'll call methods to control the velocity of individual particles and their colors
         velocityModule(velocity);
-        colorModule();
+        colorModule(mat);
         //Add the noise module
         noiseModule();
     }
@@ -92,7 +92,7 @@ public class particleSystemFigure4
         velocityOverLifetime.z = minMaxCurveY;
     }
 
-    public void colorModule()
+    public void colorModule(Material mat)
     {
         //The colorOverLifetime interfaces manages the color of the objects over their lifetime.
         var colorOverLifetime = particleSystemComponent.colorOverLifetime;
@@ -102,7 +102,7 @@ public class particleSystemFigure4
         //While we are here, let's add a material to our particles
         ParticleSystemRenderer r = particleSystemGameObject.GetComponent<ParticleSystemRenderer>();
         //There a few different ways to do this, but we've created a material that is based on the default particle shader
-        r.material = Resources.Load<Material>("particleMaterial");
+        r.material = mat;
 
         Gradient grad = new Gradient();
         //This gradient key lets us choose points on a gradient that represent different RGBA or Unity.Color values.

@@ -525,9 +525,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c033404540fa9be49822543041903f53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  multiplier: 7
+  multiplier: 3.63
   inclineAngle: 45
-  frictionCoefficient: 0.5
+  frictionCoefficient: 1
 --- !u!1 &1963819928
 GameObject:
   m_ObjectHideFlags: 0

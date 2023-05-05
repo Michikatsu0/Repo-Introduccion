@@ -167,7 +167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e50eaedd5e13d0b40911820a11cac6fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delay: 0
+  location: {x: 0, y: 0}
+  velocity: {x: 0, y: 0}
+  acceleration: {x: 0.1, y: 0.1}
+  oscillationSpeed: 1
 --- !u!1 &1385069292
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,90 +4,32 @@ using UnityEngine;
 
 public class Step3_1 : MonoBehaviour
 {
-    [SerializeField] float delay;
-    List<Oscillator> oscilattors = new List<Oscillator>(); 
-    List<Mover2_Step2_3> movers = new List<Mover2_Step2_3>();
-    List<Attractor2_Step2_3> l_attractors = new List<Attractor2_Step2_3>();
-    float time = 0;
-    int attractorIndex = 0;
+    List<Oscillator_Step3_1> oscilattors = new List<Oscillator_Step3_1>();
+    List<Mover2_Step2_2> movers = new List<Mover2_Step2_2>();
+
+    Attractor2_Step2_2 attractor;
     void Start()
     {
-        int numberOfMovers = 40;
+        int numberOfMovers = 13;
         for (int i = 0; i < numberOfMovers; i++)
         {
             Vector2 randomLocation = new Vector2(Random.Range(-7f, 7f), Random.Range(-7f, 7f));
             Vector2 randomVelocity = new Vector2(Random.Range(0f, 5f), Random.Range(0f, 5f));
-            Mover2_Step2_3 m = new Mover2_Step2_3(Random.Range(0.2f, 1f), randomVelocity, randomLocation); //Each Mover is initialized randomly.
+            Mover2_Step2_2 m = new Mover2_Step2_2(Random.Range(0.4f, 1.4f), randomVelocity, randomLocation); //Each Mover is initialized randomly.
             movers.Add(m);
         }
-
-        int nomberOfAtractors = 10;
-        for (int i = 0; i < nomberOfAtractors; i++)
-        {
-            Attractor2_Step2_3 a = new Attractor2_Step2_3();
-            l_attractors.Add(a);
-        }
-
+        attractor = new Attractor2_Step2_2();
         while (oscilattors.Count < 10)
         {
-            oscilattors.Add(new Oscillator());
-        }
-    }
-    private void Update()
-    {
-        if (time >= delay)
-        {
-            attractorIndex++;
-            time = 0;
-        }
-        time += Time.deltaTime;
+            oscilattors.Add(new Oscillator_Step3_1());
 
-        foreach (Attractor2_Step2_3 attractor in l_attractors)
-        {
-            attractor.attractor.SetActive(false);
         }
-
-        if (attractorIndex == l_attractors.Count)
-            attractorIndex = 0;
-
-        l_attractors[attractorIndex].attractor.SetActive(true);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        foreach (Mover2_Step2_3 m in movers)
-        {
-            Rigidbody body = m.body;
-            Vector2 force = l_attractors[attractorIndex].Attract(body); // Apply the attraction from the Attractor on each Mover object
-
-            m.ApplyForce(force);
-
-
-            m.CalculatePosition();
-        }
-
-        for (int i = 0; i < movers.Count; i++)
-        {
-            for (int j = 0; j < movers.Count; j++)
-            {
-                if (i != j)
-                {
-                    // Now that we are sure that our Mover will not attract itself, we need it to attract a different Mover
-                    // We do that by directing a mover to use their Attract() method on another mover Rigidbodys
-                    Vector2 attractedMover = movers[j].Repel(movers[i].body);
-
-                    // We then apply that force the mover with the Rigidbody's Addforce() method
-                    movers[i].body.AddForce(attractedMover * 0.08f, ForceMode.Impulse);
-                }
-            }
-            // Now we check the boundaries of our scene to make sure the movers don't fly off
-            // When we use gravity, the Movers will naturally fall out of the camera's view
-            // This stops that.
-            movers[i].CalculatePosition();
-        }
-
-        foreach (Oscillator o in oscilattors)
+        foreach (Oscillator_Step3_1 o in oscilattors)
         {
             //Each oscillator object oscillating on the x-axis
             float x = Mathf.Cos(o.angle.x) * o.amplitude.x;
@@ -104,10 +46,39 @@ public class Step3_1 : MonoBehaviour
             //Move the oscillator
             o.oGameObject.transform.transform.Translate(new Vector2(x, y) * Time.deltaTime);
         }
+        foreach (Mover2_Step2_2 m in movers)
+        {
+            Rigidbody body = m.body;
+            Vector2 attractForce = attractor.Attract(body); // Apply the attraction from the Attractor on each Mover object
+            Vector2 repelForce = attractor.Repel(body);
+            m.ApplyForce(attractForce * 10);
+            m.ApplyForce(repelForce * 0.08f);
+            m.CalculatePosition();
+        }
+
+        for (int i = 0; i < movers.Count; i++)
+        {
+            for (int j = 0; j < movers.Count; j++)
+            {
+                if (i != j)
+                {
+                    // Now that we are sure that our Mover will not attract itself, we need it to attract a different Mover
+                    // We do that by directing a mover to use their Attract() method on another mover Rigidbodys
+                    Vector2 attractedMover = movers[j].Attract(movers[i].body);
+
+                    // We then apply that force the mover with the Rigidbody's Addforce() method
+                    movers[i].body.AddForce(attractedMover, ForceMode.Impulse);
+                }
+            }
+            // Now we check the boundaries of our scene to make sure the movers don't fly off
+            // When we use gravity, the Movers will naturally fall out of the camera's view
+            // This stops that.
+            movers[i].CalculatePosition();
+        }
     }
 }
 
-public class Oscillator3_1
+public class Oscillator_Step3_1
 {
 
     // The basic properties of an oscillator class
@@ -122,7 +93,7 @@ public class Oscillator3_1
     // Create variables for rendering the line between two vectors
     public LineRenderer lineRender;
 
-    public Oscillator3_1(Vector3 pos)
+    public Oscillator_Step3_1()
     {
         FindWindowLimits();
 
@@ -146,7 +117,6 @@ public class Oscillator3_1
 
         // Begin rendering the line between the two objects. Set the first point (0) at the centerSphere Position
         // Make sure the end of the line (1) appears at the new Vector3 in FixedUpdate()
-        center = new Vector2(0f, 0f);
         lineRender.SetPosition(0, center);
     }
 
